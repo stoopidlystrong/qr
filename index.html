@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Generator Zakładów | Stoopidly Strong</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            background: #f0f0f0; 
+            margin: 0; 
+            padding: 20px; 
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 { color: #ff5722; text-align: center; }
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        button {
+            background: #ff5722;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        #qrResult { margin-top: 20px; text-align: center; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🏋️‍♂️ Stwórz Zakład!</h1>
+        <input type="text" id="player1" placeholder="Zawodnik 1 (np. Jan Kowalski)" required>
+        <input type="text" id="player2" placeholder="Zawodnik 2 (np. Adam Nowak)" required>
+        <textarea id="challenge" placeholder="Opis wyzwania (np. Kto zrobi więcej pompek w 1 minutę?)" required></textarea>
+        <button onclick="generateChallenge()">Generuj QR</button>
+        <div id="qrResult"></div>
+    </div>
+
+    <!-- Biblioteka do generowania QR -->
+    <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
+    
+    <script>
+        function generateChallenge() {
+            const player1 = document.getElementById("player1").value;
+            const player2 = document.getElementById("player2").value;
+            const challenge = document.getElementById("challenge").value;
+
+            if (!player1 || !player2 || !challenge) {
+                alert("Wypełnij wszystkie pola!");
+                return;
+            }
+
+            // Unikalne ID zakładu
+            const challengeId = "challenge_" + Math.random().toString(36).substr(2, 9);
+
+            // Zapisz dane w localStorage (symulacja bazy danych)
+            const challengeData = { player1, player2, challenge };
+            localStorage.setItem(challengeId, JSON.stringify(challengeData));
+
+            // URL do strony z wyzwaniem (hostowanej na GitHub)
+            const challengeUrl = window.location.href.replace("index.html", "") + "challenge.html?id=" + challengeId;
+
+            // Wygeneruj QR
+            document.getElementById("qrResult").innerHTML = `
+                <h3>${player1} vs ${player2}</h3>
+                <div id="qrcode" style="margin: 20px auto;"></div>
+                <p>Zeskanuj kod, aby zobaczyć wyzwanie!</p>
+            `;
+            new QRCode(document.getElementById("qrcode"), challengeUrl);
+        }
+    </script>
+</body>
+</html>
