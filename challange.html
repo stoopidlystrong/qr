@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Zakład | Stoopidly Strong</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            text-align: center; 
+            padding: 20px; 
+            background: #f0f0f0;
+        }
+        .challenge-card {
+            max-width: 500px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 { color: #ff5722; }
+    </style>
+</head>
+<body>
+    <div class="challenge-card" id="challengeCard">
+        <h1>🥊 Zakład!</h1>
+        <p id="players"></p>
+        <p id="challengeText"></p>
+        <a href="index.html">Stwórz własny zakład</a>
+    </div>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const challengeId = urlParams.get('id');
+        const challengeData = JSON.parse(localStorage.getItem(challengeId));
+
+        if (challengeData) {
+            document.getElementById("players").textContent = 
+                `${challengeData.player1} vs ${challengeData.player2}`;
+            document.getElementById("challengeText").textContent = 
+                challengeData.challenge;
+        } else {
+            document.getElementById("challengeCard").innerHTML = 
+                "<p>Ten zakład już wygasł lub nie istnieje.</p>";
+        }
+    </script>
+</body>
+</html>
