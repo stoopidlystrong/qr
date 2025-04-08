@@ -1,38 +1,88 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Generator Zakładów</title>
+    <title>Generator Zakładów | Stoopidly Strong</title>
     <style>
-        body { font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; }
-        input, textarea { width: 100%; padding: 10px; margin: 5px 0; }
-        button { background: #ff5722; color: white; border: none; padding: 10px 15px; cursor: pointer; }
-        #qrResult { margin-top: 20px; text-align: center; }
+        body {
+            font-family: 'Arial', sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #ff5722;
+            text-align: center;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        button {
+            background: #ff5722;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background: #e64a19;
+        }
+        #qrResult {
+            margin-top: 20px;
+            text-align: center;
+        }
     </style>
-    <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
 </head>
 <body>
-    <h1>Stwórz Zakład</h1>
-    <input type="text" id="player1" placeholder="Zawodnik 1">
-    <input type="text" id="player2" placeholder="Zawodnik 2">
-    <textarea id="challenge" placeholder="Opis wyzwania"></textarea>
-    <button onclick="generateQR()">Generuj QR</button>
-    <div id="qrResult"></div>
+    <div class="container">
+        <h1>🏋️‍♂️ Stwórz Zakład!</h1>
+        <input type="text" id="player1" placeholder="Zawodnik 1 (np. Jan Kowalski)" required>
+        <input type="text" id="player2" placeholder="Zawodnik 2 (np. Adam Nowak)" required>
+        <textarea id="challenge" placeholder="Opis wyzwania (np. Kto zrobi więcej pompek w 1 minutę?)" required></textarea>
+        <button onclick="generateChallenge()">Generuj QR</button>
+        <div id="qrResult"></div>
+    </div>
 
+    <!-- Biblioteka do generowania QR -->
+    <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
+    
     <script>
-    function generateQR() {
-        const player1 = encodeURIComponent(document.getElementById("player1").value);
-        const player2 = encodeURIComponent(document.getElementById("player2").value);
-        const challenge = encodeURIComponent(document.getElementById("challenge").value);
-        
-        const baseUrl = window.location.href.split('/').slice(0, 3).join('/') + '/';
-        const challengeUrl = `${baseUrl}challenge.html?p1=${player1}&p2=${player2}&c=${challenge}`;
-        
-        document.getElementById("qrResult").innerHTML = `
-            <div id="qrcode"></div>
-            <p>Zeskanuj kod QR</p>
-        `;
-        new QRCode(document.getElementById("qrcode"), challengeUrl);
-    }
+        function generateChallenge() {
+            const player1 = document.getElementById("player1").value;
+            const player2 = document.getElementById("player2").value;
+            const challenge = document.getElementById("challenge").value;
+
+            if (!player1 || !player2 || !challenge) {
+                alert("Wypełnij wszystkie pola!");
+                return;
+            }
+
+            // Stały adres bazowy dla Twojego repozytorium
+            const baseUrl = "https://stoopidlystrong.github.io/qr/";
+            const challengeUrl = `${baseUrl}challenge.html?p1=${encodeURIComponent(player1)}&p2=${encodeURIComponent(player2)}&c=${encodeURIComponent(challenge)}`;
+
+            // Wygeneruj QR
+            document.getElementById("qrResult").innerHTML = `
+                <h3>${player1} vs ${player2}</h3>
+                <div id="qrcode" style="margin: 15px auto;"></div>
+                <p>Zeskanuj kod, aby zobaczyć wyzwanie!</p>
+            `;
+            new QRCode(document.getElementById("qrcode"), challengeUrl);
+        }
     </script>
 </body>
 </html>
