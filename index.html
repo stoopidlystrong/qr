@@ -1,33 +1,38 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Zakład | Stoopidly Strong</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Generator Zakładów</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; }
+        input, textarea { width: 100%; padding: 10px; margin: 5px 0; }
+        button { background: #ff5722; color: white; border: none; padding: 10px 15px; cursor: pointer; }
+        #qrResult { margin-top: 20px; text-align: center; }
+    </style>
+    <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
 </head>
 <body>
-    <div class="challenge-card">
-        <h1>🥊 Zakład!</h1>
-        <p id="players"></p>
-        <p id="challengeText"></p>
-        <a href="index.html">Stwórz własny zakład</a>
-    </div>
+    <h1>Stwórz Zakład</h1>
+    <input type="text" id="player1" placeholder="Zawodnik 1">
+    <input type="text" id="player2" placeholder="Zawodnik 2">
+    <textarea id="challenge" placeholder="Opis wyzwania"></textarea>
+    <button onclick="generateQR()">Generuj QR</button>
+    <div id="qrResult"></div>
 
     <script>
-        const urlParams = new URLSearchParams(window.location.search);
-        const player1 = decodeURIComponent(urlParams.get('player1') || '');
-        const player2 = decodeURIComponent(urlParams.get('player2') || '');
-        const challenge = decodeURIComponent(urlParams.get('challenge') || '');
-
-        if (player1 && player2 && challenge) {
-            document.getElementById("players").textContent = `${player1} vs ${player2}`;
-            document.getElementById("challengeText").textContent = challenge;
-        } else {
-            document.querySelector(".challenge-card").innerHTML = `
-                <h1>❌ Błąd</h1>
-                <p>Nieprawidłowy link zakładu. Upewnij się, że zeskanowałeś poprawny kod QR.</p>
-                <a href="index.html">Wróć do generatora</a>
-            `;
-        }
+    function generateQR() {
+        const player1 = encodeURIComponent(document.getElementById("player1").value);
+        const player2 = encodeURIComponent(document.getElementById("player2").value);
+        const challenge = encodeURIComponent(document.getElementById("challenge").value);
+        
+        const baseUrl = window.location.href.split('/').slice(0, 3).join('/') + '/';
+        const challengeUrl = `${baseUrl}challenge.html?p1=${player1}&p2=${player2}&c=${challenge}`;
+        
+        document.getElementById("qrResult").innerHTML = `
+            <div id="qrcode"></div>
+            <p>Zeskanuj kod QR</p>
+        `;
+        new QRCode(document.getElementById("qrcode"), challengeUrl);
+    }
     </script>
 </body>
 </html>
