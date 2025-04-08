@@ -1,32 +1,59 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Zakład</title>
+    <title>Zakład | Stoopidly Strong</title>
     <style>
-        body { font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; }
+        body {
+            font-family: 'Arial', sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .challenge-card {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        h1 {
+            color: #ff5722;
+            margin-top: 0;
+        }
+        a {
+            color: #ff5722;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
-    <div id="challengeData">
-        <h1>Szczegóły zakładu</h1>
+    <div class="challenge-card" id="challengeCard">
+        <h1>🥊 Zakład!</h1>
         <p id="players"></p>
         <p id="challengeText"></p>
+        <a href="index.html">Stwórz własny zakład</a>
     </div>
 
     <script>
-    const params = new URLSearchParams(window.location.search);
-    if(params.has('p1')) {
-        document.getElementById("players").textContent = 
-            `${decodeURIComponent(params.get('p1'))} vs ${decodeURIComponent(params.get('p2'))}`;
-        document.getElementById("challengeText").textContent = 
-            decodeURIComponent(params.get('c'));
-    } else {
-        document.getElementById("challengeData").innerHTML = `
-            <h1>Błąd</h1>
-            <p>Nie znaleziono danych zakładu</p>
-            <a href="index.html">Wróć do generatora</a>
-        `;
-    }
+        const params = new URLSearchParams(window.location.search);
+        
+        if (params.has('p1')) {
+            document.getElementById("players").textContent = 
+                `${decodeURIComponent(params.get('p1'))} vs ${decodeURIComponent(params.get('p2'))}`;
+            document.getElementById("challengeText").textContent = 
+                decodeURIComponent(params.get('c'));
+        } else {
+            document.getElementById("challengeCard").innerHTML = `
+                <h1>❌ Błąd</h1>
+                <p>Nie znaleziono danych zakładu.</p>
+                <a href="index.html">Wróć do generatora</a>
+            `;
+        }
     </script>
 </body>
 </html>
